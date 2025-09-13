@@ -4,20 +4,6 @@ When you hit **Send** in Gmail or Outlook Web, a dramatic banner appears with so
 
 ---
 
-## Table of Contents
-
-- [🚀 Features](#-features)
-- [🔧 Installation](#-installation)
-- [📂 Project Structure](#-project-structure)
-- [🌍 Language Support](#-language-support)
-- [🖥️ Browser Compatibility & Installation](#️-browser-compatibility--installation)
-- [⚠️ Known Issues](#️-known-issues)
-- [🛡️ Privacy](#️-privacy)
-- [💖 Support the Project](#-support-the-project)
-- [✨ Credits & Disclaimer](#-credits--discaimer)
-
----
-
 ## 🚀 Features
 - 📨 Works on **Gmail** and **Outlook Web**  
 - 📜 Elden Ring–style banner on email sent  
@@ -52,21 +38,16 @@ When you hit **Send** in Gmail or Outlook Web, a dramatic banner appears with so
 ---
 
 ## 📂 Project Structure
-```
-├── manifest_chrome.json     # Manifest MV3 for Chrome/Edge/Brave/Opera/Vivaldi
-├── manifest_firefox.json    # Manifest MV2 for Firefox
-├── package.json             # Build scripts and package management
-├── LICENSE                  # MIT License
-├── README.md                # Rules and info
-├── src/
-│   ├── content.js           # Core script (banner logic)
-│   ├── style.css            # Styles for banner
-│   ├── popup.html           # Pop up
-│   ├── popup.css            # Pop up style
-│   ├── popup.js             # Pop up logic
-│   ├── privacy_policy.md    # Privacy
-│   └── assets/              # Icons and sound
-```
+├── manifest.json       # Extension manifest<br>
+├── content.js          # Core script (banner logic)<br>
+├── style.css           # Styles for banner<br>
+├── popup.html          # Pop up <br>
+├── popup.css           # Pop up style <br>
+├── popup.js            # Pop up logic <br>
+├── privacy_policy.md   # Privacy <br>
+├── README.md           # Rules and info <br>
+└── assets/             # Icons and sound<br> 
+
 ---
 
 ## 🌍 Language Support
@@ -85,7 +66,7 @@ As promised, now the extension supports the following languages for the Send but
 - 🇹🇭 Thai (`ส่ง`)
 - 🇸🇪 Swedish (`Skicka`)
 
-If your language isn’t listed, don't hesitate to contact me, I will add it in the next update!
+If your language isn’t listed, don't hesitate to contact me!
 
 ---
 
@@ -97,42 +78,31 @@ Elden Email is designed to work not only on Chrome, but also on the most popular
 - **Recommended:** Search for “Elden Email” on the Chrome Web Store and install in one click.
 - **Manual:** See instructions above, but the official store version is preferred for automatic updates.
 
-### 🌀 Edge
+### 🟦 Edge
 - **Compatibility:** Microsoft Edge supports Chrome extensions almost 100%.
 - **How to Install:**  
   - Visit [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons).
   - Search for “Elden Email” and install directly from the store.
 
-### 🔴 Opera
+### 🟥 Opera
 - **Compatibility:** Opera supports Manifest V2/V3 extensions.
 - **How to Install:**  
   - Go to [Opera Add-ons](https://addons.opera.com).
   - Search for “Elden Email” and install from the store.
 
-### 🦊 Firefox
-- **Compatibility:** Firefox uses the “WebExtensions” system, very similar to Chrome’s.  
+### 🟧 Firefox
+- **Compatibility:** Firefox uses the “WebExtensions” system, very similar to Chrome’s.
+- **How to Install:**  
+> easier steps will come!! just need to bring everything to mozilla!
+  - Visit [Firefox Add-ons](https://addons.mozilla.org).
+  - Search for “Elden Email” and install from the store.
+  - If you are publishing, note:
+    - Some APIs differ (`chrome.*` → `browser.*`).
+    - Images must be listed in `web_accessible_resources` with a slightly different format.
+    - Some functions may need a [webextension-polyfill](https://github.com/mozilla/webextension-polyfill).
+    - If you get errors, consult the [MDN migration guide](https://developer.mozilla.org/docs/Mozilla/Add-ons/WebExtensions/Chrome_incompatibilities).
 
-- **How to Install from the Store:**  
-  - Visit [Firefox Add-ons](https://addons.mozilla.org).  
-  - Search for “Elden Email” and install it directly from the store.  
-
-- **How to Test or Build Locally:**  
-  - Go to the `src/` folder of the project (this contains all source files).  
-  - Copy all files into a new folder `dist/firefox/`.  
-  - Rename `manifest_firefox.json` to `manifest.json`.  
-  - Create a ZIP of **all files inside** `dist/firefox/` (do **not** zip the `firefox/` folder itself).  
-  - Open Firefox → `about:debugging` → “This Firefox” → “Load Temporary Add-on” → select the `manifest.json` inside your ZIP or folder.  
-  - Test the extension: the banner should appear when sending an email; the popup may not save preferences yet.  
-
-- **Publishing Notes:**  
-  - Some APIs differ (`chrome.*` → `browser.*`).  
-  - Images must be listed in `web_accessible_resources` with a slightly different format.  
-  - You may need [webextension-polyfill](https://github.com/mozilla/webextension-polyfill) for Firefox compatibility.  
-  - Provide source code and a README explaining the build process when submitting to Mozilla.  
-  - Consult the [MDN migration guide](https://developer.mozilla.org/docs/Mozilla/Add-ons/WebExtensions/Chrome_incompatibilities) if you encounter errors.  
-
-
-### 🦁 Brave, Vivaldi, and other Chromium Browsers
+### 🟩 Brave, Vivaldi, and other Chromium Browsers
 - **Compatibility:** Full support for Chrome extensions.
 - **How to Install:**  
   - Search for “Elden Email” on the Chrome Web Store and install directly.
@@ -167,17 +137,9 @@ Your support helps me add more languages, sounds, and customization features!
 
 ---
 
-## ✨ Credits & Discaimer
-
-**Banner Images:**  
-Banner images used in this extension are generated using [From Software image macro creator](https://rezuaq.be/new-area/image-creator/), a fan-made tool inspired by FromSoftware games. All rights to original game textures and fonts utilized by the tool belong to their respective owners. For further information on asset licensing, refer to the disclaimer on the From Software image macro creator website.
-
-**Sound Effects:**  
-Sound effects included in this extension are sourced from public YouTube videos. All rights to original music and sound effects belong to FromSoftware and other respective copyright holders. If you are a copyright holder and have concerns regarding the use of these assets, please contact me for removal or modification.
-
-**Inspiration:**  
-This extension is a fan project inspired by the works of FromSoftware, including but not limited to Elden Ring, Dark Souls, Bloodborne, Sekiro, and Demon’s Souls. This project is not affiliated with, endorsed by, or associated with FromSoftware, Sony Interactive Entertainment, Bandai Namco Entertainment, Activision Publishing, or any other official entity.
-
-If you have questions or concerns about asset usage or licensing, please feel free to reach out.
+## ✨ Credits
+Inspired by **Elden Ring** (FromSoftware).<br>
+Thanks to https://rezuaq.be/new-area/image-creator/ for the images.
 
 Created just for fun.  
+
