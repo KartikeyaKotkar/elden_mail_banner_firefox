@@ -1,50 +1,36 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "Elden Email",
   "version": "1.1.1",
-  "browser_specific_settings": {
-  "gecko": {
-    "id": "elden-email@eldenemail.com",
-    "strict_min_version": "109.0",
-    "data_collection_permissions": {
-      "required": ["none"],
-      "optional": []
-    }
-  }
-},
   "description": "Shows an Elden Ring banner when you send an email",
   "permissions": ["storage"],
-   "action": {
-      "default_popup": "popup.html",
-      "default_icon": {
-        "48": "assets/icon.png"
-      }
-   },
-    "host_permissions": [
-      "https://mail.google.com/*",
-      "https://outlook.office.com/*"
-    ],
+  "browser_action": {
+    "default_popup": "src/popup.html",
+    "default_icon": {
+      "48": "assets/icon.png"
+    }
+  },
   "content_scripts": [
     {
       "matches": [
         "https://mail.google.com/*",
-        "https://outlook.office.com/*"
+        "https://outlook.office.com/*",
+        "https://youtube.com/*",
+        "https://www.youtube.com/*"
       ],
-      "js": ["content.js"],
-      "css": ["style.css"]
+      "js": ["src/content.js"],
+      "css": ["src/style.css"]
     }
   ],
   "icons": {
     "48": "assets/icon.png"
   },
   "web_accessible_resources": [
-    {
-      "resources": ["assets/email_sent_yellow.png", "assets/email_sent_blue.png", "assets/email_sent_red.png","assets/elden_ring_sound.mp3", "assets/Matinia.otf"],
-      "matches": [
-        "https://mail.google.com/*",
-        "https://outlook.office.com/*"
-      ]
-    }
+    "assets/email_sent_yellow.png",
+    "assets/email_sent_blue.png",
+    "assets/email_sent_red.png",
+    "assets/elden_ring_sound.mp3",
+    "assets/youtuber_subscribed.png",
+    "assets/Mantinia.otf"
   ]
 }
-

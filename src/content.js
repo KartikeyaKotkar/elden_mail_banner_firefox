@@ -5,7 +5,7 @@ console.log("Elden Mail Banner content.js loaded!");
 const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
 
 // pre-load the sound file
-const soundUrl = browserAPI.runtime.getURL("assets/elden_ring_sound.mp3");
+const soundUrl = browserAPI.runtime.getURL("src/assets/elden_ring_sound.mp3");
 
 // dictionary of "Send" keywords in various languages
 const keywords = ["Invia","Send","傳送","发送","送信","보내기","Enviar","Senden","Envoyer","Отправить","إرسال","ส่ง","Skicka"];
@@ -31,23 +31,46 @@ browserAPI.storage.onChanged.addListener((changes) => {
 });
 
 
-function showEldenRingBanner() {
+function showEldenRingBanner(type = 'email') {
     console.log("Banner function called");
 
     const banner = document.createElement('div');
     banner.id = 'elden-ring-banner';
-    const imgPath = browserAPI.runtime.getURL(`assets/email_sent_${bannerColor}.png`);
+    const imgPath = browserAPI.runtime.getURL(
+        type === 'subscribe' 
+            ? 'src/assets/youtuber_subscribed.png'
+            : `src/assets/email_sent_${bannerColor}.png`
+    );
     const img = document.createElement('img');
     img.src = imgPath;
-    img.alt = 'Email Sent';
+    img.alt = type === 'subscribe' ? 'Subscribed' : 'Email Sent';
     banner.appendChild(img);
     document.body.appendChild(banner);
     console.log("Banner appended");
 
     if (soundEnabled) {
-        const audio = new Audio(soundUrl);
-        audio.volume = 0.35;
-        audio.play().catch(err => console.error("Errore nel suono:", err));
+        try {
+            const audio = new Audio();
+            audio.volume = 0.35;
+            audio.src = soundUrl;
+            
+            // Add event listeners to better handle errors
+            audio.addEventListener('error', (e) => {
+                console.error("Audio error:", e.target.error);
+            });
+            
+            // Load the audio first, then play
+            audio.load();
+            const playPromise = audio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.catch(err => {
+                    console.error("Error playing sound:", err);
+                });
+            }
+        } catch (err) {
+            console.error("Error setting up audio:", err);
+        }
     }
 
     setTimeout(() => banner.classList.add('show'), 50);
@@ -108,3 +131,25 @@ const outlookObserver = new MutationObserver(() => {
     });
 });
 outlookObserver.observe(document.body, { childList: true, subtree: true });
+
+const youtubeObserver = new MutationObserver(() => {
+    document.querySelectorAll('yt-icon-button, button, div[role="button"]').forEach(btn => {
+        // take aria-label and innerText
+        const label = btn.getAttribute("aria-label") || "";
+        const text = (btn.innerText || "").trim();
+        
+        // Check for both send feedback and subscribe buttons
+        const isSendFeedbackBtn = /send feedback/i.test(label) || /send feedback/i.test(text);
+        const isSubscribeBtn = /^subscribe$/i.test(text) || /^subscribe$/i.test(label);
+
+        if ((isSendFeedbackBtn || isSubscribeBtn) && !btn.dataset.eldenRingAttached) {
+            btn.addEventListener('click', () => {
+                const action = isSubscribeBtn ? "subscribe" : "send feedback";
+                console.log(`YouTube ${action} button clicked`);
+                setTimeout(() => showEldenRingBanner(action), 500);
+            });
+            btn.dataset.eldenRingAttached = "true";
+        }
+    });
+});
+youtubeObserver.observe(document.body, { childList: true, subtree: true })
