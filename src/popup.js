@@ -1,20 +1,23 @@
-/*
 document.addEventListener("DOMContentLoaded", () => {
   const soundToggle = document.getElementById("soundToggle");
   const colorOptions = document.querySelectorAll(".color-option");
+  
+  // Use browser API with chrome as fallback for cross-browser compatibility
+  const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
 
   // load preferences
-  chrome.storage.sync.get(["soundEnabled", "bannerColor"], (prefs) => {
+  browserAPI.storage.sync.get(["soundEnabled", "bannerColor"]).then((prefs) => {
     soundToggle.checked = prefs.soundEnabled !== false; // default true -> with sound
     const selectedColor = prefs.bannerColor || "yellow";
     colorOptions.forEach(opt => {
       opt.classList.toggle("selected", opt.dataset.color === selectedColor);
     });
-  });
+  }).catch(err => console.error("Error loading preferences:", err));
 
   // save sound toggle
   soundToggle.addEventListener("change", () => {
-    chrome.storage.sync.set({ soundEnabled: soundToggle.checked });
+    browserAPI.storage.sync.set({ soundEnabled: soundToggle.checked })
+      .catch(err => console.error("Error saving sound preference:", err));
   });
 
   // save color choice
@@ -22,46 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
     opt.addEventListener("click", () => {
       colorOptions.forEach(c => c.classList.remove("selected"));
       opt.classList.add("selected");
-      chrome.storage.sync.set({ bannerColor: opt.dataset.color });
-    });
-  });
-});*/
-
-// version 2.0 that worked fully on Chrome and partially on Firefox
-document.addEventListener("DOMContentLoaded", async () => {
-  const soundToggle = document.getElementById("soundToggle");
-  const colorOptions = document.querySelectorAll(".color-option");
-
-  // polyfill
-  const storage = (typeof browser !== "undefined") ? browser.storage : chrome.storage;
-
-  const DEFAULT_SOUND = true;
-  const DEFAULT_COLOR = "yellow";
-
-  // read saved preferences
-  const res = await storage.sync.get(["soundEnabled", "bannerColor"]);
-  const prefs = {
-    soundEnabled: res.soundEnabled !== undefined ? res.soundEnabled : DEFAULT_SOUND,
-    bannerColor: res.bannerColor || DEFAULT_COLOR
-  };
-
-  // apply preferences to popup
-  soundToggle.checked = prefs.soundEnabled;
-  colorOptions.forEach(opt => {
-    opt.classList.toggle("selected", opt.dataset.color === prefs.bannerColor);
-  });
-
-  // save sound toggle
-  soundToggle.addEventListener("change", () => {
-    storage.sync.set({ soundEnabled: soundToggle.checked });
-  });
-
-  // save color choice
-  colorOptions.forEach(opt => {
-    opt.addEventListener("click", () => {
-      colorOptions.forEach(c => c.classList.remove("selected"));
-      opt.classList.add("selected");
-      storage.sync.set({ bannerColor: opt.dataset.color });
+      browserAPI.storage.sync.set({ bannerColor: opt.dataset.color })
+        .catch(err => console.error("Error saving color preference:", err));
     });
   });
 });
